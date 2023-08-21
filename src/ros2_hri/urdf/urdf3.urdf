@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<robot name="camera_robot_position_3">
+  <origin xyz="-1.098 -2.45139 2.7" rpy="0 0.50001 0.85"/> <!-- Mover todo o robô para a posição desejada -->
+
+  <!-- Link Base (base do robô) -->
+  <link name="base_link">
+    <!-- Defina a geometria e os gráficos visuais para a base, por exemplo, uma caixa -->
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <!-- Defina as propriedades inerciais -->
+    <inertial>
+      <mass value="1.0"/> <!-- Defina uma massa adequada -->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+      <gravity>false</gravity>
+    </inertial>
+  </link>
+
+  <!-- Link da Câmera 3 -->
+  <link name="camera3_link">
+    <!-- Defina a geometria e os gráficos visuais para a câmera 3 -->
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <!-- Defina as propriedades inerciais -->
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+      <gravity>false</gravity>
+    </inertial>
+  </link>
+
+  <!-- Junta para câmera 3 -->
+  <joint name="fixed_camera3_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera3_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Alterada a origem para 0 0 0 -->
+  </joint>
+
+  <!-- Plugin de câmera 3 -->
+  <gazebo reference="camera3_link">
+    <sensor type="camera" name="camera3_sensor">
+      <update_rate>30.0</update_rate>
+      <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Colocar a câmera no centro do link -->
+      <camera name="camera3">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera3_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera3</cameraName>
+        <imageTopicName>camera3/image_raw</imageTopicName>
+        <cameraInfoTopicName>camera3/camera_info</cameraInfoTopicName>
+        <frameName>camera3_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- Configuração da gravidade -->
+  <gazebo>
+    <static>true</static> <!-- Impede que a gravidade afete o objeto -->
+  </gazebo>
+
+</robot>
+

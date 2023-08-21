@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot xmlns="http://gprt-digitaltwin.com/camera" name="camera_robot_position_1">
+  <origin xyz="1.602 -2.85139 2.65" rpy="-0.000001 0.7 2.0"/>
+  
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+      <gravity>false</gravity>
+    </inertial>
+  </link>
+
+  <link name="camera1_link">
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+      <gravity>false</gravity>
+    </inertial>
+  </link>
+  <joint name="fixed_camera1_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera1_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <gazebo>
+    <static>true</static>
+  </gazebo>
+
+  <gazebo reference="camera1_link">
+    <sensor type="camera" name="camera1_sensor">
+      <update_rate>30.0000</update_rate>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <camera name="camera21">
+        <horizontal_fov>1.3962634000</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.0200</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0000</mean>
+          <stddev>0.0070</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera1_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.000</updateRate>
+        <cameraName>camera1</cameraName>
+        <imageTopicName>camera1/image_raw</imageTopicName>
+        <cameraInfoTopicName>camera1/camera_info</cameraInfoTopicName>
+        <frameName>camera1_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+</robot>
